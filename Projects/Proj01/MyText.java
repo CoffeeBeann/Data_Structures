@@ -62,11 +62,12 @@ public class MyText implements Text
     public MyText() 
     {
         // Create & connect Head & Tail Nodes (Cursor = Head)
-        tail = new Node();
+        tail = new Node('\0', null, null);
         head = new Node('\0', tail, null);
         cursor = new Node('\0', head, null);
         tail.prev = head;
         size = 0;
+        cursIndex = 0;
     }
 
     @Override
@@ -91,40 +92,90 @@ public class MyText implements Text
         if (cursor.next.data == '\0')
         {
             cursor.next.data = c;
+
+            // Append Tail if needed
+            if (cursor.next.next == null) 
+            {
+                cursor.next.next = new Node('\0', null, cursor.next);
+                tail = cursor.next.next;
+            }
+
+            cursor.next = cursor.next.next;
+            cursIndex++;
             size++;
             return;
         }
 
-        /** Insert at a non empty element at start
+        /** Adding at the head of a List
          * 
-         * [x]       or     [Hello]
-         *  ^                   ^
-         * 
-         * text.insert('y');
+         * [abc]        or        [a]
+         *  ^                       ^
+         *  
+         * text.insert('x');
          */ 
-        if (cursor.next.data != '\0') 
+        if (cursor.next.prev == null) 
         {
-            cursor.next.prev = new Node(c, cursor.next, cursor.next.prev);
+            Node newData = new Node(c, cursor.next, null);
+            cursor.next.prev = newData;
+            head = newData;
+            //cursor.next = newData;
+            cursor.next = cursor.next.next;
+            cursIndex++;
+            size++;
+            return;
         }
 
-        // Data has 2 Nodes around it
+        /** Insert with 2 Nodes around element
+         * 
+         *  [abc]        or        [ab]
+         *    ^                      ^
+         * 
+         * text.insert('x');
+         */
         Node newData = new Node(c, cursor.next, cursor.next.prev);
         cursor.next.prev.next = newData;
         cursor.next.prev = newData;
-        cursor.next = newData; 
+        cursIndex++;
+        size++;
+        return; 
     }
 
     @Override
     public void delete() throws NoSuchElementException
     {
-        throw new NoSuchElementException();
+        if (cursor.next.data == '\0')
+            throw new NoSuchElementException("Invalid index!");
+
+        // Check if cursor is at the front of the list
+        if (cursor.next == head) 
+        {
+            // Edge case if size is 1
+            if (cursor.next.next.data == '\0') 
+            {  
+                cursor.next.data = '\0';
+            }
+            else { // if size > 1
+                cursor.next = cursor.next.next;
+                head = head.next;
+                cursor.next.prev.next = null;
+                head.prev = null;
+            } 
+
+            size--;
+            return;
+
+        }
+
+        // Case for everything else
+        cursor.next = cursor.next.next;
+        cursor.next.prev.prev.next = cursor.next;
+        cursor.next.prev = cursor.next.prev.prev;
+        size--;
+        return;
     }
 
     @Override
-    public boolean canMoveLeft()
-    {
-        return false;
-    }
+    public boolean canMoveLeft() { return cursIndex != 0; }
 
     @Override
     public void moveLeft() throws NoSuchElementException
@@ -132,14 +183,12 @@ public class MyText implements Text
         if (!canMoveLeft())
             throw new NoSuchElementException("Cannot move mouse left!");
         
-        cursor.next = cursor.prev;
+        cursor.next = cursor.next.prev;
+        cursIndex--;
     }
 
     @Override
-    public boolean canMoveRight()
-    {
-        return true;
-    }
+    public boolean canMoveRight() { return cursIndex < size; }
 
     @Override
     public void moveRight() throws NoSuchElementException
@@ -147,30 +196,30 @@ public class MyText implements Text
         if (!canMoveRight())
             throw new NoSuchElementException("Cannot move mouse left!");
         
-        cursor.next = cursor.next;
+        cursor.next = cursor.next.next;
+        cursIndex++;
     }
 
     @Override
     public void print()
     {
-        printHelper(head);
+        printHelper(head, cursor);
     }
 
-    public void printHelper(Node head) 
+    private void printHelper(Node head, Node cursor) 
     {
-        // Check that node is not null
-        if (head.data != '\0') 
+        for (Node tmp = head; tmp.next != null; tmp = tmp.next) 
         {
-            System.out.print(head.data + " ");
-        } 
+            if (tmp.data != '\0')
+                System.out.print(tmp.data);
+        }
 
-        // Check if end of list has been reached
-        if (head.next == null) 
-            return;  
+        System.out.println();
+
+        for (int i = 0; i < cursIndex; i++) 
+            System.out.print(" ");
         
-        // Traverse to next Node
-        printHelper(head.next);
-
+        System.out.println("^");
     }
 
     // Main Method for testing
@@ -178,10 +227,5 @@ public class MyText implements Text
     {
         // Create MyText object for testing
         Text text = new MyText();
-
-        text.insert('a');
-
-        text.print();
-
     }
 }
