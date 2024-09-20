@@ -44,4 +44,6 @@ public interface BoundedStack<T> {
    * The capacity should remain unchanged.
    */
   void clear();
+
+  void print();
 }

@@ -118,8 +118,6 @@ public class MyText implements Text
             Node newData = new Node(c, cursor.next, null);
             cursor.next.prev = newData;
             head = newData;
-            //cursor.next = newData;
-            cursor.next = cursor.next.next;
             cursIndex++;
             size++;
             return;
@@ -220,12 +218,5 @@ public class MyText implements Text
             System.out.print(" ");
         
         System.out.println("^");
-    }
-
-    // Main Method for testing
-    public static void main(String [] args) 
-    {
-        // Create MyText object for testing
-        Text text = new MyText();
     }
 }
