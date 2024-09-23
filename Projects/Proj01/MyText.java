@@ -69,7 +69,10 @@ public class MyText implements Text
         size = 0;
         cursIndex = 0;
     }
-
+    
+    /**
+     * Method to return the element the cursor is pointing to in the Linked List
+     */
     @Override
     public char get() throws NoSuchElementException 
     {
@@ -79,6 +82,9 @@ public class MyText implements Text
         return cursor.next.data;
     }
     
+    /**
+     * Method to insert an element into a Text object
+     */
     @Override
     public void insert(char c)
     {
@@ -137,7 +143,10 @@ public class MyText implements Text
         size++;
         return; 
     }
-
+  
+    /**
+     * Method to delete the element that the cursor points at
+     */
     @Override
     public void delete() throws NoSuchElementException
     {
@@ -203,9 +212,14 @@ public class MyText implements Text
     {
         printHelper(head, cursor);
     }
-
+    
+    /**
+     * Helper method to print out the contents of a Text object in order using
+     * for loops
+     */
     private void printHelper(Node head, Node cursor) 
     {
+        // Output data
         for (Node tmp = head; tmp.next != null; tmp = tmp.next) 
         {
             if (tmp.data != '\0')
@@ -213,7 +227,8 @@ public class MyText implements Text
         }
 
         System.out.println();
-
+        
+        // Output Cursor
         for (int i = 0; i < cursIndex; i++) 
             System.out.print(" ");
         

@@ -37,7 +37,11 @@ public class MyBoundedStack<T> implements BoundedStack<T>
         bottom = 0;
         array = (T[]) new Object[capacity]; // Default Capacity of 4
     }
-
+    
+    /**
+     * Method to clear the contents of a Bounded Stack, yet keep the capacity
+     * the same
+     */
     @Override
     public void clear() 
     {
@@ -49,7 +53,11 @@ public class MyBoundedStack<T> implements BoundedStack<T>
     
     @Override
     public boolean isEmpty() { return size == 0; }
-
+  
+    /**
+     * Method to grab the item at the top of the stack, remove, and return it to
+     * the user. 
+     */
     @Override
     public T pop() throws NoSuchElementException
     {
@@ -74,7 +82,12 @@ public class MyBoundedStack<T> implements BoundedStack<T>
         return rtn;
         
     }
-
+    
+    /**
+     * Method to add an element to a Bounded Stack. 
+     * Data will overlap to the beginning of the array if the end of an array is
+     * hit
+     */
     @Override
     public void push(T item) 
     {
@@ -114,34 +127,86 @@ public class MyBoundedStack<T> implements BoundedStack<T>
         
     }
 
+    /**
+     * Method to set the capacity of a Bounded Stack to a given value
+     * Will delete values if bounded list is shrunk
+     */
     @Override
     public void setCapacity(int newCapacity) 
     {
-        if (capacity > newCapacity) 
+        // Set tmp array to new array of the given capacity
+        amortizeTmp = (T[]) new Object[newCapacity];
+        int newSize = 0;
+        int stopCount; // Keeps track of what to put in new array and in what order
+
+        // reset array if size <= 1
+        if (newCapacity <= 1) 
         {
-            if (top < bottom) 
+            amortizeTmp = (T[]) new Object[newCapacity];
+            if (size != 0)
             {
-
-            } 
-            else if (bottom > top) 
-            {
-
+                amortizeTmp[0] = array[top];
+                newSize = 1;
             }
-            else // if you try to set capacity on an empty array??
+            else
+                newSize = 0;
+            top = 0;
+            bottom = 0;
             
+        }
+        else if (capacity > newCapacity) // if array size needs to shrink 
+        {
+            stopCount = capacity - newCapacity;
+    
+            while (stopCount >= 0)
+            {
+                amortizeTmp[stopCount] = array[top];
+                top--;
+                // Make sure top pointer wraps around array
+                if (top == -1)
+                    top = capacity - 1; 
 
+                newSize++;
+                stopCount--;
+            }
+            
+            // Assign new top and bottom values 
+            top = capacity - newCapacity;
+            bottom = 0;
 
         }
-        else if (capacity < newCapacity) 
+        else if (capacity < newCapacity) // if array needs to grow
         {
+            stopCount = size;
+            int i = 0;
+            while (stopCount > 0) 
+            {
+                // assign tmp array values from current array and count up
+                amortizeTmp[i] = array[bottom];
+                bottom++;
+                if (bottom == size)
+                    bottom = 0;
+                
+                newSize++;
+                stopCount--;
+                i++;
+            }
 
         }
         else
             return;
         
+        // Assign new values
+        size = newSize;
+        capacity = newCapacity;
+        array = amortizeTmp;
+        
     }
-
-    @Override
+  
+    /**
+     * Method to print out the contents of a bounded stack in order from bottom
+     * to top.
+     */
     public void print() 
     {
         if (top < bottom) 
@@ -171,15 +236,12 @@ public class MyBoundedStack<T> implements BoundedStack<T>
     {
         BoundedStack<Integer> array = new MyBoundedStack<Integer>(5);
 
-        for (int i = 0; i < 9; i++)
+        for (int i = 0; i < 10; i++)
             array.push(i);
-        
-        for (int i = 0; i < 5; i++) 
-            array.pop();
-        
+
+        array.setCapacity(0);
+
         array.print();
 
-        
-        
     }
 }
