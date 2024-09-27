@@ -12,12 +12,30 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V>
     // Inner Node class
     private class Node 
     {
-        //
-    }
+        // Private Node variables
+        private K data;
+        private V Key;
+        private Node next;
+
+        // Public Node constructor
+        public Node() 
+        {
+            data = null;
+            key = null;
+            next = null;
+        }
+
+        // Public Node constructor with arguments
+        public Node(K data, V key, Node next) 
+        {
+            // Variable assignments
+            this.data = data;
+            this.key = key;
+            this.next = next;
+        }
+        
     // Private variable declarations
     private LinkedList list;
-    private K data;
-    private V key;
 
     // Public Constructor of BSTMap
     public BSTMap() 
@@ -31,7 +49,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V>
     @Override
     public V get(K key) 
     {
-              
+        return null;  
     }
 
     @Override
@@ -68,4 +86,13 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V>
         // requirement: O(height)
         throw new UnsupportedOperationException("implement remove(k) last!");
     }
+
+    public static void main(String [] args) 
+    {
+        // Variable declaration
+        LinkedList list = new LinkedList();
+        
+
+    }
+    
 } 
