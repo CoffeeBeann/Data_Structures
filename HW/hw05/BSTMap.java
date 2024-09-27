@@ -9,6 +9,11 @@ import java.util.LinkedList;
 
 public class BSTMap<K extends Comparable<K>, V> implements Map<K,V> 
 {
+    // Inner Node class
+    private class Node 
+    {
+        //
+    }
     // Private variable declarations
     private LinkedList list;
     private K data;
@@ -26,7 +31,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V>
     @Override
     public V get(K key) 
     {
-        
+              
     }
 
     @Override
