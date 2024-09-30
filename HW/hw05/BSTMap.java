@@ -15,23 +15,26 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V>
         // Private Node variables
         private K data;
         private V Key;
-        private Node next;
+        private Node left;
+        private Node right;
 
         // Public Node constructor
         public Node() 
         {
-            data = null;
-            key = null;
-            next = null;
+            this.data = null;
+            this.key = null;
+            this.left = null;
+            this.right = null;
         }
 
         // Public Node constructor with arguments
-        public Node(K data, V key, Node next) 
+        public Node(K data, V key, Node left, Node right) 
         {
             // Variable assignments
             this.data = data;
             this.key = key;
-            this.next = next;
+            this.left = left;
+            this.right = right;
         }
         
     // Private variable declarations
