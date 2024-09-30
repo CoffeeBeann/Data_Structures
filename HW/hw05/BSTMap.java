@@ -75,7 +75,24 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V>
     @Override
     public boolean containsKey(K key) 
     {
-        return false;
+       return containsHelper(key, root);
+    }
+    
+    public boolean containsHelper(K key, Node curr) 
+    {
+       if (curr == null)
+            return false;
+
+       // Check if Current Node is less than Key
+        if (curr.key.compareTo(key) < 0)
+            return getHelper(key, curr.left); // Traverse Left
+
+        // Check if Current Node is greater than Key
+        if (curr.key.compareTo(key) > 0)
+            return getHelper(key, curr.right); // Traverse Right
+       
+        // Match Found 
+        return true;
     }
 
     @Override
