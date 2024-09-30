@@ -28,7 +28,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V>
         }
 
         // Public Node constructor with arguments
-        public Node(K data, V key, Node left, Node right) 
+        public Node(V data, K key, Node left, Node right) 
         {
             // Variable assignments
             this.data = data;
@@ -49,7 +49,6 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V>
         root = new Node();
     }
 
-
     @Override
     public V get(K key) 
     {
@@ -59,10 +58,18 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V>
     public V getHelper(K key, Node curr) 
     {
         if (curr == null) 
-            return null;
+            return null; // Nothing was Found
         
-        return null;
-        
+        // Check if Current Node is less than Key
+        if (curr.key.compareTo(key) < 0)
+            return getHelper(key, curr.left); // Traverse Left
+
+        // Check if Current Node is greater than Key
+        if (curr.key.compareTo(key) > 0)
+            return getHelper(key, curr.right); // Traverse Right
+       
+        // Match Found 
+        return curr.data;
     }
 
     @Override
@@ -74,7 +81,25 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V>
     @Override
     public void put(K key, V value) 
     {
-        return;
+        this.root = putHelper(root, key, value);
+    }
+
+    public Node putHelper(Node curr, K key, V value) 
+    {
+        // Add new Node is end is Reached
+        if (curr == null)
+            curr = new Node(value, key, null, null);
+            
+        // Check if Current Node is less than Key
+        if (curr.key.compareTo(key) < 0)
+            return putHelper(key, curr.left); // Traverse Left
+
+        // Check if Current Node is greater than Key
+        if (curr.key.compareTo(key) > 0)
+            return putHelper(key, curr.right); // Traverse Right
+  
+        // Duplicates are found if this is reached
+        throw new Exception("No Duplicates Allowed!!!");
     }
 
     @Override
@@ -98,7 +123,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V>
     public static void main(String [] args) 
     {
         // Variable declaration
-        LinkedList<Integer> list = new LinkedList<Integer>();
+        Deque<Integer> list = new LinkedList<Integer>();
     }
     
 } 
