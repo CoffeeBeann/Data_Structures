@@ -13,8 +13,8 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V>
     private class Node 
     {
         // Private Node variables
-        private K data;
-        private V key;
+        private V data;
+        private K key;
         private Node left;
         private Node right;
 
@@ -52,21 +52,21 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V>
     @Override
     public V get(K key) 
     {
-        return getHelper(key, root);
+        return getHelper(root, key);
     }
 
-    public V getHelper(K key, Node curr) 
+    public V getHelper(Node curr, K key) 
     {
         if (curr == null) 
             return null; // Nothing was Found
         
         // Check if Current Node is less than Key
         if (curr.key.compareTo(key) < 0)
-            return getHelper(key, curr.left); // Traverse Left
+            return getHelper(curr.left, key); // Traverse Left
 
         // Check if Current Node is greater than Key
         if (curr.key.compareTo(key) > 0)
-            return getHelper(key, curr.right); // Traverse Right
+            return getHelper(curr.right, key); // Traverse Right
        
         // Match Found 
         return curr.data;
@@ -75,21 +75,21 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V>
     @Override
     public boolean containsKey(K key) 
     {
-       return containsHelper(key, root);
+       return containsHelper(root, key);
     }
     
-    public boolean containsHelper(K key, Node curr) 
+    public boolean containsHelper(Node curr, K key) 
     {
        if (curr == null)
             return false;
 
        // Check if Current Node is less than Key
         if (curr.key.compareTo(key) < 0)
-            return getHelper(key, curr.left); // Traverse Left
+            return containsHelper(curr.left, key); // Traverse Left
 
         // Check if Current Node is greater than Key
         if (curr.key.compareTo(key) > 0)
-            return getHelper(key, curr.right); // Traverse Right
+            return containsHelper(curr.right, key); // Traverse Right
        
         // Match Found 
         return true;
@@ -109,14 +109,14 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V>
             
         // Check if Current Node is less than Key
         if (curr.key.compareTo(key) < 0)
-            return putHelper(key, curr.left); // Traverse Left
+            return putHelper(curr.left, key, value); // Traverse Left
 
         // Check if Current Node is greater than Key
         if (curr.key.compareTo(key) > 0)
-            return putHelper(key, curr.right); // Traverse Right
-  
-        // Duplicates are found if this is reached
-        throw new Exception("No Duplicates Allowed!!!");
+            return putHelper(curr.right, key, value); // Traverse Right
+        
+        System.out.println("No Duplicates Allowed");
+        return null;
     }
 
     @Override
@@ -141,6 +141,15 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V>
     {
         // Variable declaration
         Deque<Integer> list = new LinkedList<Integer>();
+
+        list.put("test1", 1);
+        list.put("test2", 2);
+        list.put("test3", 3);
+        list.put("test4", 4);
+        list.put("test5", 5);
+        list.put("test6", 6);
+
+
     }
     
 } 
