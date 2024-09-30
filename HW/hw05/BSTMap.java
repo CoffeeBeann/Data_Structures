@@ -14,7 +14,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V>
     {
         // Private Node variables
         private K data;
-        private V Key;
+        private V key;
         private Node left;
         private Node right;
 
@@ -36,66 +36,69 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V>
             this.left = left;
             this.right = right;
         }
+    }
         
     // Private variable declarations
     private LinkedList list;
+    private Node root;
 
     // Public Constructor of BSTMap
     public BSTMap() 
-    } 
+    {
         list = new LinkedList();
-        data = null;
-        key = null;
+        root = new Node();
     }
 
 
     @Override
     public V get(K key) 
     {
-        return null;  
+        return getHelper(key, root);
+    }
+
+    public V getHelper(K key, Node curr) 
+    {
+        if (curr == null) 
+            return null;
+        
+        return null;
+        
     }
 
     @Override
     public boolean containsKey(K key) 
     {
-        // requirement: O(height)
-        throw new UnsupportedOperationException("you need to implement containsKey(k)");
+        return false;
     }
 
     @Override
     public void put(K key, V value) 
     {
-        // requirement: O(height)
-        throw new UnsupportedOperationException("you need to implement put(k,v)");
+        return;
     }
 
     @Override
     public int size() 
     {
-        // requirement: O(1)
-        throw new UnsupportedOperationException("you need to implement size()");
+        return 0;
     }
 
     @Override
     public Deque<K> traverse() 
     {
-        // requirement: O(n)
-        throw new UnsupportedOperationException("you need to implement traverse()");
+        return null;
     }
 
     @Override
     public void remove(K key) 
     {
-        // requirement: O(height)
-        throw new UnsupportedOperationException("implement remove(k) last!");
+        return;
     }
 
     public static void main(String [] args) 
     {
         // Variable declaration
-        LinkedList list = new LinkedList();
-        
-
+        LinkedList<Integer> list = new LinkedList<Integer>();
     }
     
 } 
