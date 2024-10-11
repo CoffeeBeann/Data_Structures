@@ -1,16 +1,16 @@
 JUNIT_JAR = /usr/share/java/junit4.jar
 
-compile:
+myCompile:
 	javac DoubleTree.java AddMax.java
 
-test: compile
+myTest: compile
 	java DoubleTree
 
-#compile:
-#	javac -Xlint:all -cp .:$(JUNIT_JAR) *.java
+compile:
+	javac -Xlint:all -cp .:$(JUNIT_JAR) *.java
 
-#test: compile
-#	java -ea -cp .:$(JUNIT_JAR) org.junit.runner.JUnitCore AddMaxTest
+test: compile
+	java -ea -cp .:$(JUNIT_JAR) org.junit.runner.JUnitCore AddMaxTest
 
 clean:
 	rm -f *.class
