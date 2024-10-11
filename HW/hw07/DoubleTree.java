@@ -47,11 +47,11 @@ public class DoubleTree implements AddMax
 
         // Right child with no left child
         if (curr.left == null && curr.right != null)
-            return curr.right.height + 1;
+            return -1 - curr.right.height;
 
         // Both children
         if (curr.left != null && curr.right != null)
-            return Math.max(curr.left.height, curr.right.height) + 1;
+            return curr.left.height - curr.right.height;
 
         // No children (Leaf node)
         else
@@ -71,7 +71,7 @@ public class DoubleTree implements AddMax
         else if (balanceFact(curr) == -2) 
         {
             // Double rotation case
-            if (balanceFact(curr.left) == 1) 
+            if (curr.left != null && balanceFact(curr.left) == 1) 
                 curr.left = lRotate(curr.left);
 
             curr = rRotate(curr);
@@ -81,7 +81,7 @@ public class DoubleTree implements AddMax
         else if (balanceFact(curr) == 2) 
         {
             // Double rotation case
-            if (balanceFact(curr.right) == -1)
+            if (curr.right != null && balanceFact(curr.right) == -1)
                 curr.right = rRotate(curr.right);
 
             curr = lRotate(curr);
