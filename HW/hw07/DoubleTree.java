@@ -42,21 +42,28 @@ public class DoubleTree implements AddMax
     {
         // Left child with no right child
         if (curr.left != null && curr.right == null)
-            return 0;
+            return curr.left.height + 1;
 
         // Right child with no left child
         if (curr.left == null && curr.right != null)
-            return 0;
+            return curr.right.height + 1;
 
         // Both children
         if (curr.left != null && curr.right != null)
-            return 0;
+            return Math.max(curr.left.height, curr.right.height) + 1;
 
         // No children (Leaf node)
         else
             return 0;
     }
-
+    
+    /**
+     * Method to rebalance AVL Trees 
+     */
+    public Node rebalance(Node curr) 
+    {
+        return null;
+    }
 
     /**
      * Methods to add a double to the AVL Tree
@@ -85,6 +92,9 @@ public class DoubleTree implements AddMax
         // Update height of Node
         updateHeight(curr);
 
+        // Rebalance Tree
+        
+        
         return curr;
     }
 
