@@ -31,6 +31,7 @@ public class DoubleTree implements AddMax
 
     // Private AVL Tree variables
     private Node root;
+    private double max;
     
     // AVL constructor method 
     public DoubleTree() { root = null; }
@@ -62,7 +63,34 @@ public class DoubleTree implements AddMax
      */
     public Node rebalance(Node curr) 
     {
-        return null;
+        // If AVL Tree is already balanced
+        if (-1 <= balanceFact(curr) && balanceFact(curr) <= 1)
+            return curr;
+
+        // Right heavy AVL
+        else if (balanceFact(curr) == -2) 
+        {
+            // Double rotation case
+            if (balanceFact(curr.left) == 1) 
+                curr.left = lRotate(curr.left);
+
+            curr = rRotate(curr);
+        }
+
+        // Left heady AVL
+        else if (balanceFact(curr) == 2) 
+        {
+            // Double rotation case
+            if (balanceFact(curr.right) == -1)
+                curr.right = rRotate(curr.right);
+
+            curr = lRotate(curr);
+        }
+        
+        // Update heights
+        updateHeight(curr);
+
+        return curr;
     }
 
     /**
@@ -92,9 +120,8 @@ public class DoubleTree implements AddMax
         // Update height of Node
         updateHeight(curr);
 
-        // Rebalance Tree
-        
-        
+        // Rebalance Tree 
+        curr = rebalance(curr);  
         return curr;
     }
 
@@ -129,14 +156,14 @@ public class DoubleTree implements AddMax
     {
         // Left child with no right child
         if (curr.left != null && curr.right == null)
-            curr.height = curr.left.height++;
+            curr.height = curr.left.height + 1;
       
         // Right child with no left child
-        if (curr.left == null && curr.right != null)
-            curr.height = curr.right.height++;
+        else if (curr.left == null && curr.right != null)
+            curr.height = curr.right.height + 1;
         
         // Both children
-        if (curr.left != null && curr.right != null)
+        else if (curr.left != null && curr.right != null)
             curr.height = Math.max(curr.left.height, curr.right.height) + 1;
         
         // No children (Leaf node)
@@ -155,13 +182,12 @@ public class DoubleTree implements AddMax
         if (root == null)
             throw new NoSuchElementException("AVL Tree is empty!");
 
-        return removeRecurse(root); 
+        root = removeRecurse(root);
+        return max;
     }
 
-    public double removeRecurse(Node curr) throws NoSuchElementException 
+    public Node removeRecurse(Node curr) throws NoSuchElementException 
     {
-        double max;
-
         if (curr.right == null) 
         {
             // Save max double
@@ -172,13 +198,31 @@ public class DoubleTree implements AddMax
                 curr = null;
             else // Left child exists
                 curr = curr.left;
-            
-            return max;
+
+            return curr;
         }
         
-        // Update height before returning 
-        max = removeRecurse(curr.right);
+        // Update height and rebalance before returning 
+        curr = removeRecurse(curr.right);
         updateHeight(curr);
-        return max;
-    }    
+        return curr;
+    }   
+
+    /**
+     * Main method for testing
+     */
+    public static void main(String [] args) 
+    {
+        DoubleTree tree = new DoubleTree();
+
+        tree.add(1);
+        tree.add(2); 
+        tree.add(3); 
+        tree.add(4); 
+        tree.add(5); 
+        tree.add(6);
+
+        for (int i = 0; i < 5; i++)
+            System.out.println(tree.removeMax());
+    }
 }
