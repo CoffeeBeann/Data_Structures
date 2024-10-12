@@ -68,23 +68,23 @@ public class DoubleTree implements AddMax
             return curr;
 
         // Right heavy AVL
-        else if (balanceFact(curr) == -2) 
+        else if (balanceFact(curr) <= -2) 
         {
             // Double rotation case
             if (curr.left != null && balanceFact(curr.left) == 1) 
-                curr.left = lRotate(curr.left);
+                curr.left = rRotate(curr.left);
 
-            curr = rRotate(curr);
+            curr = lRotate(curr);
         }
 
         // Left heady AVL
-        else if (balanceFact(curr) == 2) 
+        else if (balanceFact(curr) >= 2) 
         {
             // Double rotation case
             if (curr.right != null && balanceFact(curr.right) == -1)
-                curr.right = rRotate(curr.right);
+                curr.right = lRotate(curr.right);
 
-            curr = lRotate(curr);
+            curr = rRotate(curr);
         }
         
         // Update heights
@@ -134,6 +134,10 @@ public class DoubleTree implements AddMax
         Node middle = newRoot.left;
         newRoot.left = oldRoot;
         oldRoot.right = middle;
+
+        updateHeight(oldRoot);
+        updateHeight(newRoot);
+
         return newRoot;
     }
 
@@ -146,6 +150,10 @@ public class DoubleTree implements AddMax
         Node middle = newRoot.right;
         newRoot.right = oldRoot;
         oldRoot.left = middle;
+        
+        updateHeight(oldRoot);
+        updateHeight(newRoot);
+
         return newRoot;
     }
 
@@ -170,8 +178,6 @@ public class DoubleTree implements AddMax
         else
             curr.height = 0;
     }
-
-
 
     /**
      * Method to remove the max element from an AVL Tree
@@ -203,26 +209,9 @@ public class DoubleTree implements AddMax
         }
         
         // Update height and rebalance before returning 
-        curr = removeRecurse(curr.right);
+        curr.right = removeRecurse(curr.right);
         updateHeight(curr);
         return curr;
     }   
 
-    /**
-     * Main method for testing
-     */
-    public static void main(String [] args) 
-    {
-        DoubleTree tree = new DoubleTree();
-
-        tree.add(1);
-        tree.add(2); 
-        tree.add(3); 
-        tree.add(4); 
-        tree.add(5); 
-        tree.add(6);
-
-        for (int i = 0; i < 5; i++)
-            System.out.println(tree.removeMax());
-    }
 }
