@@ -1,3 +1,10 @@
+/***************************************************
+Filename: Map.java
+Author: MIDN Ian Coffey (m261194)
+Public Interface for a Balanced Map
+***************************************************/
+
+// Import Libraries
 import java.util.List;
 
 /** Map ADT interface, supporting insertion and lookup of key/value pairs.
