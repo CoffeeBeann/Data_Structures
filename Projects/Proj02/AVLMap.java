@@ -5,18 +5,18 @@ To Implement an Ordered map with AVL Trees
 ****************************************/
 
 // Import libraries
-import java.util.UnsupportedOperationException;
-import java.util.ArrayList;
+import java.lang.UnsupportedOperationException;
+import java.util.List;
 import java.lang.Math.*;
 
-public class AVLMap implements Map<K,V> 
+public class AVLMap<K,V>  implements Map<K,V> 
 {
     // Private inner Node Class
     private class Node 
     {
         // Node variables
         private K key;
-        private V value
+        private V value;
         private int height;
         private Node left;
         private Node right;
@@ -179,7 +179,7 @@ public class AVLMap implements Map<K,V>
     @Override 
     public boolean containsKey(K key) { return containsRecurse(root, key); }
 
-    public boolean containsRecurse(Node curr, K key) { return null; }
+    public boolean containsRecurse(Node curr, K key) { return false; }
 
     /**
      * Methods to add a key-value pair to the AVL Tree
@@ -195,7 +195,7 @@ public class AVLMap implements Map<K,V>
             return new Node(key, value);
         
         // If duplicate is found, make no changes
-        if (key == curr.key)
+        if (key.equals(curr.key))
             return curr;
 
         // Traverse down left side if x < curr
@@ -227,6 +227,6 @@ public class AVLMap implements Map<K,V>
         root = removeRecurse(root, key);
     }
 
-    public Node removeRecurse(Node curr, K key) throws NoSuchElementException { return curr; }   
+    public Node removeRecurse(Node curr, K key) throws UnsupportedOperationException { return curr; }   
 
 }
