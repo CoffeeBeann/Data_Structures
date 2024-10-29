@@ -51,7 +51,11 @@ public class TreeMap<K extends Comparable<K>,V>  implements Map<K,V>
      * O(n) runtime
      */
     @Override
-    public List<K> keys() { return null; }
+    public List<K> keys() 
+    { 
+        // Create Queue For Nodes
+        return null;    
+    }
 
     /**
      * Method to return the balance factor of a Node
@@ -216,7 +220,7 @@ public class TreeMap<K extends Comparable<K>,V>  implements Map<K,V>
      * O(logn) runtime
      */
     @Override
-    public void put(K key, V value) { root = putRecurse(root, key, value); }
+    public void put(K key, V value) { root = putRecurse(root, key, value); this.size++; }
 
     public Node putRecurse(Node curr, K key, V value) 
     {
@@ -224,9 +228,13 @@ public class TreeMap<K extends Comparable<K>,V>  implements Map<K,V>
         if (curr == null) 
             return new Node(key, value);
         
-        // If duplicate is found, make no changes
-        if (key.equals(curr.key))
-            return curr;
+        // If duplicate is found, overwrite value
+        if (key.equals(curr.key)) 
+        {
+            curr.value = value;
+            this.size--; 
+            return curr; 
+        }
 
         // Traverse down left side if x < curr
         else if (key.compareTo(curr.key) < 0) 
@@ -272,7 +280,7 @@ public class TreeMap<K extends Comparable<K>,V>  implements Map<K,V>
         tree.put(2, "two");
         
         System.out.println(tree.root.height);
-
+        System.out.println(tree.size);
         System.out.println(tree.containsKey(10));
         System.out.println(tree.containsKey(5));
         System.out.println(tree.containsKey(2));
