@@ -8,6 +8,9 @@ BUYER_ADDL_CO_INFO field is not "null", then the pharmacy
 should be BUYER_NAME and BUYER_ADDL_CO_INFO, separated by one space.
 **********************************************************************/
 
+// Import Libraries
+import java.util.List;
+
 public class Pharmacies 
 { 
     public static void main(String[] args) 
@@ -22,12 +25,28 @@ public class Pharmacies
         // To print the output, use a line like this.
         // Remember the output lines should be sorted alphabetically by
         // pharmacy name.
-        // System.out.format("%8d %s\n", pillCount, pharmacyName);
         
+        Map<String, Integer> drugCount = new TreeMap<String, Integer>();
         for (Map<String,String> aLine : pillsLines) 
         {
-            String buyer = aLine.get("BUYER_NAME");
-            System.out.println(buyer);
+            String pharmacyName = aLine.get("BUYER_NAME");
+            int pillCount = (int) (Double.parseDouble(aLine.get("DOSAGE_UNIT")));
+            
+            if (drugCount.containsKey(pharmacyName))
+                drugCount.put(pharmacyName, drugCount.get(pharmacyName) + pillCount);
+            else
+                drugCount.put(pharmacyName, pillCount);
+            
+
         }
+        
+        List<String> list = drugCount.keys();
+
+        for (int i = 0; i < list.size(); i++)
+            System.out.println(list.remove(i));
+
+        //System.out.format("%8d %s\n", pillCount, pharmacyName); 
+ 
+
     }
 }
