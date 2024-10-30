@@ -23,5 +23,11 @@ public class Pharmacies
         // Remember the output lines should be sorted alphabetically by
         // pharmacy name.
         // System.out.format("%8d %s\n", pillCount, pharmacyName);
+        
+        for (Map<String,String> aLine : pillsLines) 
+        {
+            String buyer = aLine.get("BUYER_NAME");
+            System.out.println(buyer);
+        }
     }
 }

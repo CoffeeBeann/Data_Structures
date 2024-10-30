@@ -1,6 +1,6 @@
 /****************************************
 Filename: TreeMap.java
-Author: MIDN Ian Coffey (m261194)
+Author: MIDN 2/C Ian Coffey (m261194)
 To Implement an Ordered map with AVL Trees
 ****************************************/
 
@@ -39,7 +39,7 @@ public class TreeMap<K extends Comparable<K>,V>  implements Map<K,V>
     private int size = 0;
     
     // AVL constructor method 
-    public TreeMap() { root = new Node(null, null); }
+    public TreeMap() { root = null; }
     
     /**
      * Method to return the size of the AVL Tree
@@ -57,7 +57,7 @@ public class TreeMap<K extends Comparable<K>,V>  implements Map<K,V>
     { 
         // Reset key list
         this.list = new ArrayList<K>();
-        inOrder(root, list);
+        inOrder(root);
         return list;
     }
 
@@ -66,7 +66,7 @@ public class TreeMap<K extends Comparable<K>,V>  implements Map<K,V>
         if (curr != null) 
         {
             inOrder(curr.left);
-            list.add(curr.key);
+            this.list.add(curr.key);
             inOrder(curr.right);
         } 
     }
@@ -291,7 +291,7 @@ public class TreeMap<K extends Comparable<K>,V>  implements Map<K,V>
         for (int i = 1; i <= 10; i++)
             tree.put(i, "a");
 
-        List<Node> keylist = tree.keys();
+        List<Integer> keylist = tree.keys();
         
         for (int i = 0; i < keylist.size(); i++)
             System.out.print(keylist.get(i) + " ");

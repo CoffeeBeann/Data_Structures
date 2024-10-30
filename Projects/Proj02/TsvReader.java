@@ -64,7 +64,7 @@ public class TsvReader implements Iterable<Map<String, String>> {
     }
 
     public Map<String,String> next() {
-      Map<String,String> map = null; // TODO replace with a new instance of your map!
+      TreeMap<String,String> map = new TreeMap<String,String>(); // TODO replace with a new instance of your map!
       String[] parts = peekLine().split("\t");
       for (int i = 0; i < headings.size() && i < parts.length; i++)
         map.put(headings.get(i), parts[i]);
