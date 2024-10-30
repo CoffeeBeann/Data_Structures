@@ -22,13 +22,6 @@ public class Pharmacies
         // To print the output, use a line like this.
         // Remember the output lines should be sorted alphabetically by
         // pharmacy name.
-        
-        for (TreeMap<String,String> aLine : tr) 
-        {
-            String buyer = aLine.get("BUYER_NAME");
-            String city = aLine.get("BUYER_ADDL_CO_INFO");
-  
-        }
         // System.out.format("%8d %s\n", pillCount, pharmacyName);
     }
 }
