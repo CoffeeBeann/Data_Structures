@@ -7,6 +7,7 @@ To Implement an Ordered map with AVL Trees
 // Import libraries
 import java.lang.UnsupportedOperationException;
 import java.util.List;
+import java.util.ArrayList;
 import java.lang.Math.*;
 
 public class TreeMap<K extends Comparable<K>,V>  implements Map<K,V> 
@@ -34,10 +35,11 @@ public class TreeMap<K extends Comparable<K>,V>  implements Map<K,V>
 
     // Private AVL Tree variables
     private Node root;
+    private List<K> list;
     private int size = 0;
     
     // AVL constructor method 
-    public TreeMap() { root = null; }
+    public TreeMap() { root = new Node(null, null); }
     
     /**
      * Method to return the size of the AVL Tree
@@ -51,7 +53,23 @@ public class TreeMap<K extends Comparable<K>,V>  implements Map<K,V>
      * O(n) runtime
      */
     @Override
-    public List<K> keys() { return null; }
+    public List<K> keys() 
+    { 
+        // Reset key list
+        this.list = new ArrayList<K>();
+        inOrder(root, list);
+        return list;
+    }
+
+    public void inOrder(Node curr) 
+    {
+        if (curr != null) 
+        {
+            inOrder(curr.left);
+            list.add(curr.key);
+            inOrder(curr.right);
+        } 
+    }
 
     /**
      * Method to return the balance factor of a Node
@@ -270,12 +288,14 @@ public class TreeMap<K extends Comparable<K>,V>  implements Map<K,V>
     {
         TreeMap<Integer, String> tree = new TreeMap<Integer, String>();
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 1; i <= 10; i++)
             tree.put(i, "a");
 
+        List<Node> keylist = tree.keys();
         
+        for (int i = 0; i < keylist.size(); i++)
+            System.out.print(keylist.get(i) + " ");
     }
-
     
 }
 
