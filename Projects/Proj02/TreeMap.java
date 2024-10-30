@@ -8,7 +8,8 @@ To Implement an Ordered map with AVL Trees
 import java.lang.UnsupportedOperationException;
 import java.util.List;
 import java.lang.Math.*;
-
+import java.util.Queue;
+import java.util.Deque;
 public class TreeMap<K extends Comparable<K>,V>  implements Map<K,V> 
 {
     // Private inner Node Class
@@ -54,7 +55,27 @@ public class TreeMap<K extends Comparable<K>,V>  implements Map<K,V>
     public List<K> keys() 
     { 
         // Create Queue For Nodes
-        return null;    
+        Deque<Node> nodeQueue = new Queue<Node>(); // Processing
+        Deque<Node> rtn = new Queue<Node>(); // Returning
+        nodeQueue.add(root);
+
+        // Traverse through Nodes & Output level order traversal
+        while (nodeQueue.size() > 0) 
+        {
+            // Grab next Node
+            Node x = nodeQueue.remove();
+
+            // If leaf Node, do nothing
+            if (x == null) { continue; }
+
+            // Print, L, R Order
+            rtn.enqueue(x.key);
+            nodeQueue.add(x.left);
+            nodeQueue.add(x.right);
+        }
+
+        // Return Final Dequeu of Keys
+        return rtn;
     }
 
     /**
@@ -273,19 +294,11 @@ public class TreeMap<K extends Comparable<K>,V>  implements Map<K,V>
     public static void main(String [] args) 
     {
         TreeMap<Integer, String> tree = new TreeMap<Integer, String>();
+
+        for (int i = 0; i < 10; i++)
+            tree.put(i, "a");
+
         
-        tree.put(5, "five");
-        tree.put(10, "ten");
-        tree.put(2, "two");
-        tree.put(2, "two");
-        
-        System.out.println(tree.root.height);
-        System.out.println(tree.size);
-        System.out.println(tree.containsKey(10));
-        System.out.println(tree.containsKey(5));
-        System.out.println(tree.containsKey(2));
-        System.out.println(tree.get(5));
- 
     }
 
     
