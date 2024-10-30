@@ -2,48 +2,64 @@
 Filename: Pharamcies.java
 Author: MIDN 2/C Ian Coffey (m261194)
 Program to read in ARCOS data and report pills sold by each pharmacy.
-Should be sorted in alphabetical order by pharmacy name.
-The pharmacy name is equal to the BUYER_NAME field, or, if the
-BUYER_ADDL_CO_INFO field is not "null", then the pharmacy 
-should be BUYER_NAME and BUYER_ADDL_CO_INFO, separated by one space.
-**********************************************************************/
+*********************************************************************/
 
 // Import Libraries
 import java.util.List;
+import java.util.Iterator;
 
+// Pharmacy Class
 public class Pharmacies 
 { 
+    // Main Method
     public static void main(String[] args) 
     {
         // Read Pill name file from command line or console
-        String pillsFile=null;
+        String pillsFile = null;
         if (args.length >= 1) { pillsFile = args[0]; }
         if (pillsFile == null) 
             pillsFile = System.console().readLine("pills file: ");
-        TsvReader pillsLines = new TsvReader(pillsFile);
 
-        // To print the output, use a line like this.
-        // Remember the output lines should be sorted alphabetically by
-        // pharmacy name.
+        // Create TSV Reader from pillFile
+        TsvReader pillsLines = new TsvReader(pillsFile);
         
+        // Debug stuff
+        int lineNum = 0;
+
+        // Traverse & Read TSV File to TreeMap
         Map<String, Integer> drugCount = new TreeMap<String, Integer>();
         for (Map<String,String> aLine : pillsLines) 
         {
+            // Parse info from TSV file
+            String addInfo = aLine.get("BUYER_ADDL_CO_INFO");
             String pharmacyName = aLine.get("BUYER_NAME");
             int pillCount = (int) (Double.parseDouble(aLine.get("DOSAGE_UNIT")));
-            
+ 
+            if (!addInfo.equals("null")) {
+                //System.out.print("addFlag Triggered at line: " + lineNum);
+                pharmacyName += " " + addInfo;
+                //System.out.println(" Resulting string: " + pharmacyName);
+            }
+                        
+            // Put unique info into TreeMap
             if (drugCount.containsKey(pharmacyName))
                 drugCount.put(pharmacyName, drugCount.get(pharmacyName) + pillCount);
             else
                 drugCount.put(pharmacyName, pillCount);
-            
-
+        
+            lineNum++;
         }
         
-        List<String> list = drugCount.keys();
-
-        for (int i = 0; i < list.size(); i++)
-            System.out.println(list.remove(i));
+        // Convert Key Map to Array for Traversal
+        Iterator<String> list = drugCount.keys().iterator();
+        
+        while (list.hasNext())
+        {
+            // Get next Key
+            String name = list.next();
+            int count = drugCount.get(name);
+            System.out.format("%8d %s\n", count, name); 
+        }
 
         //System.out.format("%8d %s\n", pillCount, pharmacyName); 
  
