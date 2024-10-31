@@ -39,8 +39,9 @@ public class Zips
         TsvReader zipsLines = new TsvReader(zipsFile);
 
         // Create TreeMaps to Store information from TSV Files
-        TreeMap<Integer,Integer> pillMap = new TreeMap<Integer,Integer>(); // Map<zipCode,pillCount>
-        TreeMap<String,Integer> zipMap = new TreeMap<String,Integer>(); // Map<'City & State', Population>
+        TreeMap<Integer,Integer> pillMap = new TreeMap<Integer,Integer>(); // Map<zipCode, pillCount>
+        TreeMap<String,Integer> cityZip = new TreeMap<String,Integer>(); // Map<zipCode, 'city & state'>
+        TreeMap<String,Integer> popMap = new TreeMap<String,Integer>(); // Map<'city & state', Population>
        
         // Traverse zipFile, read, & store information to pillMap
         for (Map<String,String> aLine : pillsLines)
@@ -54,6 +55,16 @@ public class Zips
                 pillMap.put(zipCode, pillMap.get(zipCode) + pillCount);
             else
                 pillMap.put(zipCode, pillCount); 
+        }
+
+        // Traverse pillFile, read, & store information to popMap
+        for (Map<String,String> aLine : zipsLine)
+        {
+            // Parse city, state, and population info from zipFile TSV Line
+            String location = aLine.get("city") + ", " + aLine.get("state_id");
+            int population = Integer.parseInt(aLine.get("population"));
+
+            // Store 
         }
         
 
