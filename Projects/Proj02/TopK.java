@@ -41,7 +41,7 @@ public class TopK<T extends Comparable<T>>
         
         // Add element to Heap
         elements.add(element);
-        elements.bubbleUp();
+        bubbleUp();
     }
 
     /**
@@ -51,10 +51,11 @@ public class TopK<T extends Comparable<T>>
     public void bubbleUp() 
     {
         // Bubble Up sort Arraylist to get proper Heap
+        int parentIndex;
         for (int i = elements.size() - 1; i > 0; i = parentIndex) 
         {
             // Calculate Parent Index
-            int parentIndex = (int) ((i - 1) / 2);
+            parentIndex = (int) ((i - 1) / 2);
             T parent = elements.get(parentIndex);
             T curr = elements.get(i);
             
@@ -66,6 +67,10 @@ public class TopK<T extends Comparable<T>>
                 elements.set(i, tmp);
             }
         }
+
+        // Delete Min Element if size > k
+        if (elements.size() > k)
+            elements.remove(0);
     }
 
     /**
@@ -75,10 +80,15 @@ public class TopK<T extends Comparable<T>>
     {
         if (elements == null)
             throw new IllegalStateException("TopK already called!");
+        
+        // Reverse list to return (largest to smallest) order
+        List<T> largest = new ArrayList<T>();
+        for (int i = elements.size() - 1; i >= 0; i--) 
+            largest.add(elements.get(i));
 
         // Make sure getTop is not called again
         elements = null;
-        return null;
+        return largest;
     }
 
     /**
