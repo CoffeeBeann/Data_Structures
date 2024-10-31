@@ -40,7 +40,7 @@ public class TopK<T extends Comparable<T>>
             throw new IllegalStateException("TopK already called!");
         
         // Add element to Heap
-        elements.addInOrder(element);
+        elements.addInOrder(element, 0, (int) ((elements.size() - 1)/2), elements.size() - 1);
     }
 
     /**
@@ -50,7 +50,8 @@ public class TopK<T extends Comparable<T>>
     public void addInOrder(T val, int small, int mid, int large) 
     {
         // Base case
-        if (large - small == 1)
+        if (ele
+        else if (large - small <= 1)
             elements.add(large, val);
         
         // Traverse right of array
