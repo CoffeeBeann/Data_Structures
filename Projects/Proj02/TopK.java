@@ -8,7 +8,8 @@ Implement a Heap to Track Top Drug Purchasors by Zip Code
 import java.util.List;
 import java.util.ArrayList;
 import java.lang.IllegalStateException;
-
+import java.util.Collections; // FIND ALTERNATIVE
+                             
 // TopK Class
 public class TopK<T extends Comparable<T>> 
 {
@@ -83,13 +84,11 @@ public class TopK<T extends Comparable<T>>
             throw new IllegalStateException("TopK already called!");
         
         // Sort ArrayList from largest to Smallest
-        List<T> largest = new ArrayList<T>();
-        for (int i = elements.size() - 1; i >= 0; i--) 
-            largest.add(elements.get(i));
+        Collections.sort(elements, Collections.reverseOrder());
 
         // Make sure getTop is not called again
-        elements = null;
-        return largest;
+        //elements = null;
+        return elements;
     }
 
     /**
@@ -98,10 +97,10 @@ public class TopK<T extends Comparable<T>>
     public static void main(String [] args)
     {
         TopK<Integer> heap = new TopK<Integer>(3);
-        
-        heap.add(5);
-        heap.add(10);
-        heap.add(2);
+
+        heap.add(26);
+        heap.add(94);
+        heap.add(3);
 
         List<Integer> list = heap.getTop();
         for (int i = 0; i < list.size(); i++)

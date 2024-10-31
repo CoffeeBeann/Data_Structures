@@ -35,19 +35,14 @@ public class Pharmacies
             String pharmacyName = aLine.get("BUYER_NAME");
             int pillCount = (int) (Double.parseDouble(aLine.get("DOSAGE_UNIT")));
  
-            if (!addInfo.equals("null")) {
-                //System.out.print("addFlag Triggered at line: " + lineNum);
+            if (!addInfo.equals("null")) 
                 pharmacyName += " " + addInfo;
-                //System.out.println(" Resulting string: " + pharmacyName);
-            }
                         
             // Put unique info into TreeMap
             if (drugCount.containsKey(pharmacyName))
                 drugCount.put(pharmacyName, drugCount.get(pharmacyName) + pillCount);
             else
                 drugCount.put(pharmacyName, pillCount);
-        
-            lineNum++;
         }
         
         // Convert Key Map to Array for Traversal
@@ -60,9 +55,5 @@ public class Pharmacies
             int count = drugCount.get(name);
             System.out.format("%8d %s\n", count, name); 
         }
-
-        //System.out.format("%8d %s\n", pillCount, pharmacyName); 
- 
-
     }
 }
