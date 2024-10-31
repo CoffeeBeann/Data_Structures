@@ -44,6 +44,27 @@ public class TopK<T extends Comparable<T>>
     }
 
     /**
+     * Method to Recursively add an element in order to the element ArrayList
+     * O(logn) runtime
+     */
+    public void addInOrder(T val, int small, int mid, int large) 
+    {
+        // Base case
+        if (large - small == 1)
+            elements.add(large, val);
+        
+        // Traverse right of array
+        else if (val.compareTo(elements.get(mid)) < 0)
+            addInOrder(mid, (int) ((large + mid) / 2), large);
+        
+        // Traverse left of array
+        else if (val.compareTo(elements.get(mid)) > 0)
+            addInOrder(small, (int) ((mid + small) / 2), mid);
+
+        // Duplicate is found (do nothing for now)
+    }
+
+    /**
      * Retreive Top K elements from the Heap 
      */
     public List<T> getTop() throws IllegalStateException
