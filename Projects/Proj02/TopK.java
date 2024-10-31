@@ -1,66 +1,105 @@
-/*****************************************
+/********************************************************
 Filename: TopK.java
 Author: MIDN 2/C Ian Coffey (m261194)
-Implement a TopK 
-*****************************************/ 
+Implement a Heap to Track Top Drug Purchasors by Zip Code
+*********************************************************/ 
 
 // Import Libraries
 import java.util.List;
 import java.util.ArrayList;
+import java.lang.IllegalStateException;
 
-/** Collects elements and allows one-time selection of the k largest ones.
- *
- * Best implemented with a heap!
- * The current implementation (using a sorted list) should be replaced
- * with something more efficient via heap operations.
- */
+// TopK Class
 public class TopK<T extends Comparable<T>> 
 {
-    /** The k value that will be used to select the top k. */
+    // Private Variable Declarations
+    private List<T> elements = new ArrayList<T>();
     private int k;
-    /** A list to hold the inserted elements. */
-    private List<T> elements = new ArrayList<>();
+    
+    // Public TopK Constructor
+    public TopK(int k) { this.k = k; }
+    
+    /**
+     * Method to return the size of the heap
+     */
+    public int size() { return elements.size(); }
+    
+    /**
+     * Method to retreive element at a given index
+     */
+    public T get(int index) { return elements.get(index); }
 
-    /** Create a new, empty instance.
-    *
-    * @param k How many items to return from a later call to getTop().
-    */
-    public TopK(int k) {
-        this.k = k;
-    }
-
-    /** Adds a new element to the collection.
-    * Note that this method should not be called after getTop() has been called.
-    */
-    public void add(T element) {
+    /**
+     * Method to Add new Element to the collection 
+     * Do not call after getTop() has been called.
+     */
+    public void add(T element) throws IllegalStateException 
+    {
+        // Check if TopK was called
         if (elements == null)
-        throw new IllegalStateException("Can't make any other calls after the first call to getTop().");
-        // NOTE: You may want to change how this works with a heap!
-        elements.add(element);
+            throw new IllegalStateException("TopK already called!");
+        
+        // Add element to Heap
+        elements.addInOrder(element);
     }
 
-    /** Retrieves the k largest elements that have been added, from largest to smallest.
-    * Note that this method can only be called once.
-    * If fewer than k items have been added, then all of them should be returned, sorted
-    * from largest to smallest.
-    */
-    public List<T> getTop() 
+    /**
+     * Retreive Top K elements from the Heap 
+     */
+    public List<T> getTop() throws IllegalStateException
     {
         if (elements == null)
-            throw new IllegalStateException("Can't make any other calls after the first call to getTop().");
+            throw new IllegalStateException("TopK already called!");
         
-        // TODO you must change everything below to use a heap instead!
-        // The current method of repeatedly removing the max is too inefficient.
-        List<T> largest = new ArrayList<>();
-        while (!elements.isEmpty() && largest.size() < k) {
-            int maxInd = 0;
-            for (int i = 0; i < elements.size(); ++i) {
-                if (elements.get(i).compareTo(elements.get(maxInd)) > 0)
-                maxInd = i;
+        // Bubble Down sort Arraylist to get proper Heap
+        for (int i = elements.size() - 1; i > 0; i--) 
+        {
+            // Calculate Parent Index
+            int parentIndex = (int) ((i - 1) / 2);
+            T parent = elements.get(parentIndex);
+            T curr = elements.get(i);
+            
+            // Swap array positions if Index > Parent
+            if (curr.compareTo(parent) > 0) 
+            {
+                T tmp = parent;
+                elements.set(parentIndex, curr);
+                elements.set(i, tmp);
             }
-            largest.add(elements.remove(maxInd));
         }
-        elements = null; // can't call any other methods after calling getTop()
+
+        // Grab Top K elements
+        List<T> largest = new ArrayList<T>();
+        
+        // Determine how many elements to copy
+        int top;
+        if (elements.size() < k)
+            top = elements.size();
+        else
+            top = k;
+
+        // Copy K largest values
+        for (int i = 0; i < top; i++) 
+            largest(elements.get(i));
+
+        // Make sure getTop is not called again
+        elements = null;
         return largest;
+    }
+
+    /**
+     * Main method for Testing
+     */
+    public static void main(String [] args)
+    {
+        TopK<Integer> heap = new TopK<Integer>(3);
+
+        for (int i = 0; i < 5; i++)
+            heap.add(i);
+
+        List<Integer> list = heap.getTop();
+        for (int i = 0; i < list.size(); i++)
+            System.out.print(list.get(i) + " ");
+        System.out.println();
     }
 }
