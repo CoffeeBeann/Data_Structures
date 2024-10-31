@@ -40,29 +40,32 @@ public class TopK<T extends Comparable<T>>
             throw new IllegalStateException("TopK already called!");
         
         // Add element to Heap
-        elements.addInOrder(element, 0, (int) ((elements.size() - 1)/2), elements.size() - 1);
+        elements.add(element);
+        elements.bubbleUp();
     }
 
     /**
-     * Method to Recursively add an element in order to the element ArrayList
+     * Method to bubble up the Arraylist into a min-heap
      * O(logn) runtime
      */
-    public void addInOrder(T val, int small, int mid, int large) 
+    public void bubbleUp() 
     {
-        // Base case
-        if (ele
-        else if (large - small <= 1)
-            elements.add(large, val);
-        
-        // Traverse right of array
-        else if (val.compareTo(elements.get(mid)) < 0)
-            addInOrder(mid, (int) ((large + mid) / 2), large);
-        
-        // Traverse left of array
-        else if (val.compareTo(elements.get(mid)) > 0)
-            addInOrder(small, (int) ((mid + small) / 2), mid);
-
-        // Duplicate is found (do nothing for now)
+        // Bubble Up sort Arraylist to get proper Heap
+        for (int i = elements.size() - 1; i > 0; i = parentIndex) 
+        {
+            // Calculate Parent Index
+            int parentIndex = (int) ((i - 1) / 2);
+            T parent = elements.get(parentIndex);
+            T curr = elements.get(i);
+            
+            // Swap array positions if Index < Parent
+            if (curr.compareTo(parent) < 0) 
+            {
+                T tmp = parent;
+                elements.set(parentIndex, curr);
+                elements.set(i, tmp);
+            }
+        }
     }
 
     /**
@@ -72,41 +75,10 @@ public class TopK<T extends Comparable<T>>
     {
         if (elements == null)
             throw new IllegalStateException("TopK already called!");
-        
-        // Bubble Down sort Arraylist to get proper Heap
-        for (int i = elements.size() - 1; i > 0; i--) 
-        {
-            // Calculate Parent Index
-            int parentIndex = (int) ((i - 1) / 2);
-            T parent = elements.get(parentIndex);
-            T curr = elements.get(i);
-            
-            // Swap array positions if Index > Parent
-            if (curr.compareTo(parent) > 0) 
-            {
-                T tmp = parent;
-                elements.set(parentIndex, curr);
-                elements.set(i, tmp);
-            }
-        }
-
-        // Grab Top K elements
-        List<T> largest = new ArrayList<T>();
-        
-        // Determine how many elements to copy
-        int top;
-        if (elements.size() < k)
-            top = elements.size();
-        else
-            top = k;
-
-        // Copy K largest values
-        for (int i = 0; i < top; i++) 
-            largest(elements.get(i));
 
         // Make sure getTop is not called again
         elements = null;
-        return largest;
+        return null;
     }
 
     /**
