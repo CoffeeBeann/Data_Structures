@@ -55,7 +55,7 @@ public class TopK<T extends Comparable<T>>
         for (int i = elements.size() - 1; i > 0; i = parentIndex) 
         {
             // Calculate Parent Index
-            parentIndex = (int) ((i - 1) / 2);
+            parentIndex = ((i - 1) / 2);
             T parent = elements.get(parentIndex);
             T curr = elements.get(i);
             
@@ -66,8 +66,9 @@ public class TopK<T extends Comparable<T>>
                 elements.set(parentIndex, curr);
                 elements.set(i, tmp);
             }
+            
         }
-
+        
         // Delete Min Element if size > k
         if (elements.size() > k)
             elements.remove(0);
@@ -81,7 +82,7 @@ public class TopK<T extends Comparable<T>>
         if (elements == null)
             throw new IllegalStateException("TopK already called!");
         
-        // Reverse list to return (largest to smallest) order
+        // Sort ArrayList from largest to Smallest
         List<T> largest = new ArrayList<T>();
         for (int i = elements.size() - 1; i >= 0; i--) 
             largest.add(elements.get(i));
@@ -97,9 +98,10 @@ public class TopK<T extends Comparable<T>>
     public static void main(String [] args)
     {
         TopK<Integer> heap = new TopK<Integer>(3);
-
-        for (int i = 0; i < 5; i++)
-            heap.add(i);
+        
+        heap.add(5);
+        heap.add(10);
+        heap.add(2);
 
         List<Integer> list = heap.getTop();
         for (int i = 0; i < list.size(); i++)
