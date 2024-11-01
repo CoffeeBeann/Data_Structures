@@ -40,7 +40,6 @@ public class Zips
 
         // Create TreeMaps to Store information from TSV Files
         TreeMap<Integer,Integer> pillMap = new TreeMap<Integer,Integer>(); // Map<zipCode, pillCount>
-        TreeMap<String,Integer> cityZip = new TreeMap<String,Integer>(); // Map<zipCode, 'city & state'>
         TreeMap<String,Integer> popMap = new TreeMap<String,Integer>(); // Map<'city & state', Population>
        
         // Traverse zipFile, read, & store information to pillMap
