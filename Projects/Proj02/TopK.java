@@ -8,8 +8,8 @@ Implement a Heap to Track Top Drug Purchasors by Zip Code
 import java.util.List;
 import java.util.ArrayList;
 import java.lang.IllegalStateException;
-import java.util.Collections; // FIND ALTERNATIVE
-                             
+import java.lang.Math;                             
+
 // TopK Class
 public class TopK<T extends Comparable<T>> 
 {
@@ -46,6 +46,42 @@ public class TopK<T extends Comparable<T>>
     }
 
     /**
+     * Method to remove and return the minimum element of the elements ArrayList
+     * O(logn) runtime
+     */
+    public T removeMin() 
+    {
+          // Save Min element and prepare for bubble down
+          T rtn = elements.get(0);
+          elements.set(0, elements.get(elements.size() - 1));
+          elements.remove(elements.size() - 1);
+
+          // Bubble down stating at the root (index 0)
+          bubbleDown(0);
+    }
+
+    public void bubbleDown(int index) 
+    {
+        // End of heap is not hit yet
+        if (index != elements.size() - 1) 
+        {
+            // Calculate Indexes & retreive values
+            int leftIndex = (2 * index) + 1;
+            int rightIndex = (2 * index) + 2;
+            int swapIndex;
+            T curr = elements.get(index);
+            T left = elements.get(leftIndex);
+            T right = elements.get(rightIndex);
+            T swap;
+
+        
+                        
+            }
+        }            
+        
+    }
+
+    /**
      * Method to bubble up the Arraylist into a min-heap
      * O(logn) runtime
      */
@@ -72,7 +108,7 @@ public class TopK<T extends Comparable<T>>
         
         // Delete Min Element if size > k
         if (elements.size() > k)
-            elements.remove(0);
+            elements.removeMin();
     }
 
     /**
@@ -83,12 +119,17 @@ public class TopK<T extends Comparable<T>>
         if (elements == null)
             throw new IllegalStateException("TopK already called!");
         
-        // Sort ArrayList from largest to Smallest
-        Collections.sort(elements, Collections.reverseOrder());
+        // Perform k removeMins to sort final result
+        List<T> largest = new ArrayList<T>();
+        for (int i = 0; i < this.k; i++) 
+        {
+            T next = elements.removeMin();
+            largest.add(0, next);
+        } 
 
         // Make sure getTop is not called again
-        //elements = null;
-        return elements;
+        elements = null;
+        return largest;
     }
 
     /**
@@ -96,11 +137,13 @@ public class TopK<T extends Comparable<T>>
      */
     public static void main(String [] args)
     {
-        TopK<Integer> heap = new TopK<Integer>(3);
+        TopK<Integer> heap = new TopK<Integer>(5);
 
         heap.add(26);
         heap.add(94);
         heap.add(3);
+        heap.add(14);
+        heap.add(32);
 
         List<Integer> list = heap.getTop();
         for (int i = 0; i < list.size(); i++)
