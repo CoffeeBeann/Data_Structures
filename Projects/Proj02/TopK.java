@@ -52,12 +52,13 @@ public class TopK<T extends Comparable<T>>
     public T removeMin() 
     {
           // Save Min element and prepare for bubble down
-          T rtn = elements.get(0);
+          T min = elements.get(0);
           elements.set(0, elements.get(elements.size() - 1));
           elements.remove(elements.size() - 1);
 
           // Bubble down stating at the root (index 0)
           bubbleDown(0);
+          return min; 
     }
 
     public void bubbleDown(int index) 
@@ -68,15 +69,51 @@ public class TopK<T extends Comparable<T>>
             // Calculate Indexes & retreive values
             int leftIndex = (2 * index) + 1;
             int rightIndex = (2 * index) + 2;
-            int swapIndex;
             T curr = elements.get(index);
             T left = elements.get(leftIndex);
             T right = elements.get(rightIndex);
-            T swap;
+            
+            if (curr.compareTo(left) > 0 || curr.compareTo(right) > 0) 
+            {
+                if (curr.compareTo(left) > 0 && curr.compareTo(right) > 0 && right.compareTo(left) > 0) 
+                {
+                    // Swap with left
+                    elements.set(index, left);
+                    elements.set(leftIndex, curr);
+                    index = leftIndex;
+                }
 
-        
-                        
+                else if (curr.compareTo(left) > 0 && curr.compareTo(right) > 0 && right.compareTo(left) < 0) 
+                {
+                    // Swap with right
+                    elements.set(index, right);
+                    elements.set(rightIndex, curr);
+                    index = rightIndex;
+                } 
+
+                else if (curr.compareTo(left) < 0 && curr.compareTo(right) > 0) 
+                {
+                    // Swap with right
+                    elements.set(index, right);
+                    elements.set(rightIndex, curr);
+                    index = rightIndex;
+                }
+
+                else if (curr.compareTo(left) > 0 && curr.compareTo(right) < 0) 
+                {
+                    // Swap with left
+                    elements.set(index, left);
+                    elements.set(leftIndex, curr);
+                    index = leftIndex;
+                }
+                
+                else 
+                {
+                    System.out.println("Something bad happened");
+                }
+
             }
+      
         }            
         
     }
@@ -108,7 +145,7 @@ public class TopK<T extends Comparable<T>>
         
         // Delete Min Element if size > k
         if (elements.size() > k)
-            elements.removeMin();
+            removeMin();
     }
 
     /**
@@ -123,7 +160,7 @@ public class TopK<T extends Comparable<T>>
         List<T> largest = new ArrayList<T>();
         for (int i = 0; i < this.k; i++) 
         {
-            T next = elements.removeMin();
+            T next = removeMin();
             largest.add(0, next);
         } 
 
