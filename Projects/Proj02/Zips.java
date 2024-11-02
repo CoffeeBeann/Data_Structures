@@ -40,8 +40,9 @@ public class Zips
 
         // Create TreeMaps to Store information from TSV Files
         TreeMap<Integer,Integer> pillMap = new TreeMap<Integer,Integer>(); // Map<zipCode, pillCount>
-        TreeMap<String,Integer> popMap = new TreeMap<String,Integer>(); // Map<'city & state', Population>
-       
+        TreeMap<Integer,Integer> popMap = new TreeMap<Integer,Integer>(); // Map<zipCode, Population>
+        TreeMap<Integer,String> locMap = new TreeMap<Integer,String>(); // Map<zipCode, Location>
+                                                                        
         // Traverse zipFile, read, & store information to pillMap
         for (Map<String,String> aLine : pillsLines)
         {
@@ -56,30 +57,73 @@ public class Zips
                 pillMap.put(zipCode, pillCount); 
         }
 
-        // Traverse pillFile, read, & store information to popMap
-        for (Map<String,String> aLine : zipsLine)
+        // Traverse pillFile, read, & store information to popMap 
+        for (Map<String,String> aLine : zipsLines)
         {
             // Parse city, state, and population info from zipFile TSV Line
             String location = aLine.get("city") + ", " + aLine.get("state_id");
             int population = Integer.parseInt(aLine.get("population"));
+            int zipCode = Integer.parseInt(aLine.get("zip"));
 
-            // Store 
+            // Store unique information into popMap
+            if (popMap.containsKey(zipCode))
+                popMap.put(zipCode, popMap.get(zipCode) + population);
+            else
+                popMap.put(zipCode, population);
+
+            // Store unique information into zipMap
+            if (!locMap.containsKey(zipCode))
+                locMap.put(zipCode, location);
         }
         
 
         //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
         // Convert Key Map to Array for Traversal
-        Iterator<Integer> list = pillMap.keys().iterator();
-        
-        while (list.hasNext())
+        Iterator<Integer> pillList = pillMap.keys().iterator();  
+        Iterator<Integer> popList = popMap.keys().iterator();
+        Iterator<Integer> locList = locMap.keys().iterator();
+
+        /**
+        System.out.println("ZIP CODE TO PILL COUNT");
+        while (pillList.hasNext())
         {
             // Get next Key
-            int zip = list.next();
-            int num = pillMap.get(zip);
-            System.out.format("%8d %s\n", num, zip); 
+            int zip = pillList.next();
+            int pill = pillMap.get(zip);
+            System.out.format("%8d %s\n", zip, pill); 
+        }
+  
+        System.out.println("ZIP CODE TO POPULATION");
+        while (popList.hasNext()) 
+        {
+            int zip = popList.next();
+            int pop  = popMap.get(zip);
+            System.out.format("%8d %s\n", zip, pop);
+        }
+
+        System.out.println("ZIPCODE TO LOCATION");
+        while (locList.hasNext()) 
+        {
+            int zip = locList.next();
+            String loc = locMap.get(zip);
+            System.out.format("%8d %s\n", zip, loc);
         }
         //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        **/
 
+        // Push information into TopK structure
+        int count = 0;
+        while (pillList.hasNext() && count < k) 
+        {
+            int zip = pillList.next();
+            int pop = popMap.get(zip);
+            int pill = pillMap.get(zip);
+            double ratio = (double) pill / (double) pop;
+            String location = locMap.get(zip);
+            System.out.format("%8.2f %s %d\n", ratio, location, zip);
+            k++;
+        } 
+        
 
         // The output lines should be sorted by the pills/population ratio, largest first.
         // System.out.format("%8.2f %s, %s %d\n", ratio, city, state, zipCode);

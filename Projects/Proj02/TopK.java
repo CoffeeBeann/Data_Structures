@@ -63,59 +63,88 @@ public class TopK<T extends Comparable<T>>
 
     public void bubbleDown(int index) 
     {
-        // End of heap is not hit yet
-        if (index != elements.size() - 1) 
+        // Does curr index exist
+        int size = elements.size() - 1;
+        if (index < size) 
         {
-            // Calculate Indexes & retreive values
+            // Calculate child indexes
             int leftIndex = (2 * index) + 1;
             int rightIndex = (2 * index) + 2;
             T curr = elements.get(index);
-            T left = elements.get(leftIndex);
-            T right = elements.get(rightIndex);
-            
-            if (curr.compareTo(left) > 0 || curr.compareTo(right) > 0) 
+
+            // Do both children exist
+            if (leftIndex <= size && rightIndex <= size) 
             {
-                if (curr.compareTo(left) > 0 && curr.compareTo(right) > 0 && right.compareTo(left) > 0) 
+                // is either child smaller than curr
+                T left = elements.get(leftIndex);
+                T right = elements.get(rightIndex);
+                
+                if (curr.compareTo(right) > 0 && curr.compareTo(left) <= 0) 
                 {
-                    // Swap with left
-                    elements.set(index, left);
-                    elements.set(leftIndex, curr);
-                    index = leftIndex;
-                }
-
-                else if (curr.compareTo(left) > 0 && curr.compareTo(right) > 0 && right.compareTo(left) < 0) 
-                {
-                    // Swap with right
+                    // swap with right
                     elements.set(index, right);
                     elements.set(rightIndex, curr);
-                    index = rightIndex;
-                } 
-
-                else if (curr.compareTo(left) < 0 && curr.compareTo(right) > 0) 
-                {
-                    // Swap with right
-                    elements.set(index, right);
-                    elements.set(rightIndex, curr);
-                    index = rightIndex;
-                }
-
-                else if (curr.compareTo(left) > 0 && curr.compareTo(right) < 0) 
-                {
-                    // Swap with left
-                    elements.set(index, left);
-                    elements.set(leftIndex, curr);
-                    index = leftIndex;
+                    bubbleDown(rightIndex);
+ 
                 }
                 
-                else 
+                else if (curr.compareTo(right) <= 0 && curr.compareTo(left) > 0) 
                 {
-                    System.out.println("Something bad happened");
+                    // swap with left
+                    elements.set(index, left);
+                    elements.set(leftIndex, curr);
+                    bubbleDown(leftIndex);
                 }
-
+              
+                else if (curr.compareTo(right) > 0 && curr.compareTo(left) > 0) 
+                {
+                    if (left.compareTo(right) > 0) 
+                    {
+                        // swap with right
+                        elements.set(index, right);
+                        elements.set(rightIndex, curr);
+                        bubbleDown(rightIndex);
+                    }
+                    else 
+                    {
+                        // swap with left
+                        elements.set(index, left);
+                        elements.set(leftIndex, curr);
+                        bubbleDown(leftIndex);
+                    }
+                }
             }
-      
-        }            
-        
+
+            // Does left child exist & right does not
+            else if (leftIndex <= size && rightIndex > size) 
+            {
+                
+                // Swap with left if left < curr
+                T left = elements.get(leftIndex);
+                
+                if (curr.compareTo(left) > 0) 
+                {
+                    // Swap with left
+                    elements.set(index, left);
+                    elements.set(leftIndex, curr);
+                    bubbleDown(leftIndex);
+                }
+            }
+            
+            // Does left child not exist & right does
+            else if (leftIndex > size && rightIndex <= size) 
+            {
+                // Swap with right if right < curr
+                T right = elements.get(rightIndex);
+                if (curr.compareTo(right) > 0) 
+                {
+                    // Swap with right
+                    elements.set(index, right);
+                    elements.set(rightIndex, curr);
+                    bubbleDown(rightIndex);
+                }
+            }
+        }
     }
 
     /**
@@ -136,9 +165,8 @@ public class TopK<T extends Comparable<T>>
             // Swap array positions if Index < Parent
             if (curr.compareTo(parent) < 0) 
             {
-                T tmp = parent;
                 elements.set(parentIndex, curr);
-                elements.set(i, tmp);
+                elements.set(i, parent);
             }
             
         }
@@ -158,7 +186,15 @@ public class TopK<T extends Comparable<T>>
         
         // Perform k removeMins to sort final result
         List<T> largest = new ArrayList<T>();
-        for (int i = 0; i < this.k; i++) 
+        
+        // Determine when to stop copying
+        int stop;
+        if (k < elements.size()) 
+            stop = k;
+        else
+            stop = elements.size();
+
+        for (int i = 0; i < stop; i++) 
         {
             T next = removeMin();
             largest.add(0, next);
@@ -174,17 +210,18 @@ public class TopK<T extends Comparable<T>>
      */
     public static void main(String [] args)
     {
-        TopK<Integer> heap = new TopK<Integer>(5);
+        TopK<String> tt = new TopK<>(3);
+        tt.add("what");
+        tt.add("is");
+        tt.add("the");
+        tt.add("what");
+        List<String> top = tt.getTop();
 
-        heap.add(26);
-        heap.add(94);
-        heap.add(3);
-        heap.add(14);
-        heap.add(32);
+        System.out.println("size = 3: what what the");
 
-        List<Integer> list = heap.getTop();
-        for (int i = 0; i < list.size(); i++)
-            System.out.print(list.get(i) + " ");
+        System.out.println();
+        for (int i = 0; i < top.size(); i++)
+            System.out.print(top.get(i) + " ");
         System.out.println();
     }
 }
