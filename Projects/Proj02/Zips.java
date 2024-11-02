@@ -7,6 +7,7 @@ highest per-capity number of opioid pills sold.
 
 // Import Libraries
 import java.util.Iterator;
+import java.util.List;
 
 // Zips Class
 public class Zips 
@@ -112,17 +113,32 @@ public class Zips
         **/
 
         // Push information into TopK structure
-        int count = 0;
-        while (pillList.hasNext() && count < k) 
+        TopK<Double> topRatio = new TopK<>(k);
+        TreeMap<Double,Integer> ratioMap = new TreeMap<Double,Integer>();
+        while (pillList.hasNext()) 
         {
+            // Grab values from TreeMaps
             int zip = pillList.next();
             int pop = popMap.get(zip);
             int pill = pillMap.get(zip);
+
+            // Calculate ratio
             double ratio = (double) pill / (double) pop;
-            String location = locMap.get(zip);
-            System.out.format("%8.2f %s %d\n", ratio, location, zip);
-            k++;
+
+            // Store <ratio, zipCode> map
+            ratioMap.put(ratio, zip);
+            topRatio.add(ratio);    
         } 
+
+        // Output Top K values
+        List<Double> largest = topRatio.getTop();
+        for (int i = 0; i < largest.size(); i++) 
+        {
+            Double next = largest.get(i);
+            int zip = ratioMap.get(next);
+            String loc = locMap.get(zip);
+            System.out.format("%8.2f %s, %d\n", next, loc, zip);
+        }
         
 
         // The output lines should be sorted by the pills/population ratio, largest first.
