@@ -60,7 +60,11 @@ public class TopK<T extends Comparable<T>>
           bubbleDown(0);
           return min; 
     }
-
+    
+    /**
+     * Method to bubble down and array 
+     * O(logn) runtime
+     */
     public void bubbleDown(int index) 
     {
         // Does curr index exist
@@ -75,7 +79,7 @@ public class TopK<T extends Comparable<T>>
             // Do both children exist
             if (leftIndex <= size && rightIndex <= size) 
             {
-                // is either child smaller than curr
+                // is either child smaller than curr?
                 T left = elements.get(leftIndex);
                 T right = elements.get(rightIndex);
                 
@@ -85,7 +89,6 @@ public class TopK<T extends Comparable<T>>
                     elements.set(index, right);
                     elements.set(rightIndex, curr);
                     bubbleDown(rightIndex);
- 
                 }
                 
                 else if (curr.compareTo(right) <= 0 && curr.compareTo(left) > 0) 
@@ -203,25 +206,5 @@ public class TopK<T extends Comparable<T>>
         // Make sure getTop is not called again
         elements = null;
         return largest;
-    }
-
-    /**
-     * Main method for Testing
-     */
-    public static void main(String [] args)
-    {
-        TopK<String> tt = new TopK<>(3);
-        tt.add("what");
-        tt.add("is");
-        tt.add("the");
-        tt.add("what");
-        List<String> top = tt.getTop();
-
-        System.out.println("size = 3: what what the");
-
-        System.out.println();
-        for (int i = 0; i < top.size(); i++)
-            System.out.print(top.get(i) + " ");
-        System.out.println();
     }
 }

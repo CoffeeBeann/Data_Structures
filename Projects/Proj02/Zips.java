@@ -78,39 +78,10 @@ public class Zips
         }
         
 
-        //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
         // Convert Key Map to Array for Traversal
         Iterator<Integer> pillList = pillMap.keys().iterator();  
         Iterator<Integer> popList = popMap.keys().iterator();
         Iterator<Integer> locList = locMap.keys().iterator();
-
-        /**
-        System.out.println("ZIP CODE TO PILL COUNT");
-        while (pillList.hasNext())
-        {
-            // Get next Key
-            int zip = pillList.next();
-            int pill = pillMap.get(zip);
-            System.out.format("%8d %s\n", zip, pill); 
-        }
-  
-        System.out.println("ZIP CODE TO POPULATION");
-        while (popList.hasNext()) 
-        {
-            int zip = popList.next();
-            int pop  = popMap.get(zip);
-            System.out.format("%8d %s\n", zip, pop);
-        }
-
-        System.out.println("ZIPCODE TO LOCATION");
-        while (locList.hasNext()) 
-        {
-            int zip = locList.next();
-            String loc = locMap.get(zip);
-            System.out.format("%8d %s\n", zip, loc);
-        }
-        //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-        **/
 
         // Push information into TopK structure
         TopK<Double> topRatio = new TopK<>(k);
@@ -137,11 +108,7 @@ public class Zips
             Double next = largest.get(i);
             int zip = ratioMap.get(next);
             String loc = locMap.get(zip);
-            System.out.format("%8.2f %s, %d\n", next, loc, zip);
+            System.out.format("%8.2f %s %d\n", next, loc, zip);
         }
-        
-
-        // The output lines should be sorted by the pills/population ratio, largest first.
-        // System.out.format("%8.2f %s, %s %d\n", ratio, city, state, zipCode);
     }
 }
