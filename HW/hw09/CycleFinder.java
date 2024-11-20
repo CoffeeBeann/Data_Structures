@@ -4,10 +4,34 @@ Author: MIDN Ian Coffey (m261194)
 To Determine if a Node is in a Cycle
 ****************************************/
 
+import java.util.*;
+
 public class CycleFinder 
 {
-    public static boolean hasCycle(Graph graph, String start) {
-        // TODO you fill in this function
+    public static boolean hasCycle(Graph graph, String start) 
+    {
+        Set<String> visited = new HashSet<>();
+        Stack fringe = new Stack();
+
+        fringe.push(start);
+        
+        while (!fringe.empty()) 
+        {
+            String uu = fringe.pop().toString();
+
+            if (!visited.contains(uu)) 
+            {
+                visited.add(uu);
+                for (String vv : graph.neighbors(uu)) 
+                {
+                    fringe.push(vv);
+
+                    if (vv.equals(start))
+                        return true;
+                }
+            }
+        }
+
         return false;
     }
 

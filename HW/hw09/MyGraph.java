@@ -4,6 +4,15 @@ Author: MIDN Ian Coffey (m261194)
 ADT Graph Implementation
 ****************************************/
 
+
+/**********************************************
+Resources Used...
+Geeks for Geeks "Traversal through a Hashmap"
+HashMap java documentation
+Set java documentation
+**********************************************/
+
+
 // Import Libraries
 import java.util.*;
 
@@ -41,9 +50,6 @@ public class MyGraph implements Graph
 
         // Use Iterator to Traverse through adjacency list
         List<String> edges = map.get(source);
-        Iterator edgeIter = edges.iterator();
-        while (edgeIter.hasNext()) 
-            System.out.println(edgeIter.next());
 
         return edges;
     }
@@ -56,7 +62,8 @@ public class MyGraph implements Graph
     public boolean getEdge(String source, String dest) throws NoSuchElementException 
     { 
         // Check if source node exists
-        if (!map.containsKey(source)) 
+        List<String> vertices = vertices();
+        if (!vertices.contains(source) || !vertices.contains(dest)) 
             throw new NoSuchElementException();
 
         // Grab Arraylist and check if dest exists
@@ -85,10 +92,11 @@ public class MyGraph implements Graph
     @Override 
     public void putEdge(String source, String dest, boolean weight) throws NoSuchElementException 
     {
-        // Check if source exists
-        if (!map.containsKey(source)) 
+        // Check if source and dest exist
+        List<String> vertices = vertices();
+        if (!vertices.contains(source) || !vertices.contains(dest))
             throw new NoSuchElementException();
-
+        
         // Grab Arraylist mapped to Vertice
         List<String> list = map.get(source);
 
@@ -113,20 +121,12 @@ public class MyGraph implements Graph
 
         // Read graph file
         Graph G = DotReader.readFrom(graphFile);
+        Graph A = new MyGraph();
+
+        A.addVertex("a");
+        A.addVertex("c");
+        A.putEdge("a","c", true);
+        A.getEdge("a","b");
         
-        Graph test = new MyGraph();
-        
-        test.addVertex("A");
-        test.addVertex("B");
-        test.addVertex("C");
-        test.addVertex("D");
-        test.putEdge("A","B", true);
-        test.putEdge("A","C", true);
-        test.putEdge("B","D", true);
-        test.putEdge("C","D", true);
-        System.out.println(test.getEdge("B","A"));
-        List<String> verts = test.vertices();
-        for (String s : verts)
-            System.out.print(s + " ");
     }
 }
