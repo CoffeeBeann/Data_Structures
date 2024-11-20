@@ -20,16 +20,12 @@ public class MyGraph implements Graph
     public List<String> vertices() 
     {
         List<String> rtn = new ArrayList<>();
-        Iterator mapIter = map.entrySet().iterator();
+        Iterator mapIter = map.keySet().iterator();
 
-        while (mapIter.hasNext()) 
-        {
-            Map.Entry vertice = (Map.Entry) mapIter.next();
-            System.out.println(vertice);
-        }
-
-        System.exit(0);
-        return null;
+        for (String vertice : map.keySet())
+            rtn.add(vertice);
+        
+        return rtn;
     }
 
     /**
@@ -59,7 +55,14 @@ public class MyGraph implements Graph
     @Override
     public boolean getEdge(String source, String dest) throws NoSuchElementException 
     { 
-        // Check if source node exists 
+        // Check if source node exists
+        if (!map.containsKey(source)) 
+            throw new NoSuchElementException();
+
+        // Grab Arraylist and check if dest exists
+        List<String> list = map.get(source);
+
+        return list.contains(dest);
     }
 
     /**
@@ -80,7 +83,23 @@ public class MyGraph implements Graph
      * @throws NoSuchElementException if source or dest vertex names don't exist.
      */
     @Override 
-    public void putEdge(String source, String dest, boolean weight) throws NoSuchElementException {}
+    public void putEdge(String source, String dest, boolean weight) throws NoSuchElementException 
+    {
+        // Check if source exists
+        if (!map.containsKey(source)) 
+            throw new NoSuchElementException();
+
+        // Grab Arraylist mapped to Vertice
+        List<String> list = map.get(source);
+
+        // If weight is true and dest does not already exist
+        if (weight && !list.contains(dest)) 
+            map.get(source).add(dest);
+
+        // If weight is false and dest does exist
+        if (!weight && list.contains(dest))
+            map.get(source).remove(dest);
+    }
 
     // Main Method for Testing 
     public static void main(String[] args) 
@@ -93,12 +112,21 @@ public class MyGraph implements Graph
             graphFile = Stdin.input("Enter graph file: ");
 
         // Read graph file
-        //Graph G = DotReader.readFrom(graphFile);
+        Graph G = DotReader.readFrom(graphFile);
         
         Graph test = new MyGraph();
         
         test.addVertex("A");
-
+        test.addVertex("B");
+        test.addVertex("C");
+        test.addVertex("D");
+        test.putEdge("A","B", true);
+        test.putEdge("A","C", true);
+        test.putEdge("B","D", true);
+        test.putEdge("C","D", true);
+        System.out.println(test.getEdge("B","A"));
         List<String> verts = test.vertices();
+        for (String s : verts)
+            System.out.print(s + " ");
     }
 }
